@@ -1,17 +1,13 @@
-package elevator;
+package Elevator;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 
+
+
 public class elevator extends Thread{
-    /**
-     * Elevator's attributes:
-     * currentState: to show the three state(stop -> -1, on - > 0, up -> 1)
-     * currentFloor: to show the current floor
-     * currentMaxFloor: to show the max floor the elevator will stop
-     * stopList: to store the floors which the elevator will stop
-     */
+
     private int name;
     private int currentState;
     private int emerState;
@@ -92,3 +88,193 @@ public class elevator extends Thread{
     public int downMin(){return minDown;}
 
     public void setMinDown(int minDown){this.minDown = minDown;}
+
+    public void run() {
+        while(true){
+            // 上升状态
+            while (currentState == 1){
+                boolean blueFlag = false;
+                for (int i = 1; i < 20; i++){
+                    buttonList[i].setText("上");
+                }
+                // 下客
+                if (!upStopList.isEmpty() && currentFloor  == upStopList.peek()) {
+                    while (currentFloor  == upStopList.peek()) {
+                        Integer a = upStopList.poll();
+                        ui.logs.append("Elevator" + name + ": number" + (currentFloor + 1) + " floor" + " occupants out\n");
+                        if(upStopList.isEmpty())
+                            break;
+                    }
+                    buttonList[currentFloor].setBackground(Color.BLUE);
+                    blueFlag = true;
+                }
+                // 载上当前上升的人
+                while (!ui.queLock[currentFloor][0]);
+                ui.queLock[currentFloor][0] = false;
+                if (!ui.queue[currentFloor][0].isEmpty()) {
+                    for (int i = 0; i < ui.queue[currentFloor][0].size(); i++) {
+                        if ((int) ui.queue[currentFloor][0].get(i) - 1 > maxUp) {
+                            maxUp = (int) ui.queue[currentFloor][0].get(i) - 1;
+                        }
+                        addUp((Integer) ui.queue[currentFloor][0].get(i) - 1);
+                        ui.logs.append("Elevator" + name + ": number" + (currentFloor + 1) + " floor occupants to" + ui.queue[currentFloor][0].get(i)
+                                + "floor\n");
+                    }
+                    buttonList[currentFloor].setBackground(Color.BLUE);
+                    blueFlag = true;
+                }
+                ui.queue[currentFloor][0].clear();
+                ui.queLock[currentFloor][0] = true;
+                // 电梯走空 载上向下的人
+                while (!ui.queLock[currentFloor][1]);
+                ui.queLock[currentFloor][1] = false;
+                if (upStopList.isEmpty() && !ui.queue[currentFloor][1].isEmpty()){
+                    for (int i = 0; i < ui.queue[currentFloor][1].size();i++){
+                        if ((int)ui.queue[currentFloor][1].get(i) - 1 < minDown){
+                            minDown = (int)ui.queue[currentFloor][1].get(i) - 1;
+                        }
+                        addDown((Integer) ui.queue[currentFloor][1].get(i) - 1);
+                        ui.logs.append("Elevator" + name + ": number" + (currentFloor + 1) + " floor occupants to" + ui.queue[currentFloor][1].get(i)
+                                + "floor\n");
+                    }
+                    if (!downStopList.isEmpty()){
+                        ui.queue[currentFloor][1].clear();
+                        setCurrentState(-1);
+                        blueFlag = true;
+                        ui.queLock[currentFloor][1] = true;
+                        ui.logs.append("Elevator" + name + " :Going down\n");
+                        break;
+                    }
+                }
+                ui.queLock[currentFloor][1] = true;
+
+                if (blueFlag){
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    buttonList[currentFloor].setBackground(Color.RED);
+                }
+                // 电梯空了 到顶了
+                if (upStopList.isEmpty() || currentFloor == 19){
+                    setCurrentState(0);
+                    maxUp = 0;
+                    minDown = 19;
+                    buttonList[currentFloor].setBackground(Color.RED);
+                    ui.logs.append("Elevator" + name + ": Stop\n");
+                    break;
+                }
+                buttonList[currentFloor].setBackground(Color.WHITE);
+                currentFloor++;
+                buttonList[currentFloor].setBackground(Color.RED);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            // 下降状态
+            while(currentState == -1){
+                boolean blueFlag = false;
+                for (int i = 1; i < 20; i++){
+                    buttonList[i].setText("Down");
+                }
+                // 下客
+                if (!downStopList.isEmpty() && currentFloor  == downStopList.peek()) {
+                    System.out.println(downStopList.peek());
+                    while (currentFloor  == downStopList.peek()) {
+                        Integer a = downStopList.poll();
+                        ui.logs.append("Elevator" + name + ": number" + (currentFloor + 1) + " floor" + " occupants out\n");
+                        if(downStopList.isEmpty())
+                            break;
+                    }
+                    buttonList[currentFloor].setBackground(Color.BLUE);
+                    blueFlag = true;
+                }
+                // 载上当前下降的人
+                while (!ui.queLock[currentFloor][1]);
+                ui.queLock[currentFloor][1] = false;
+                if (!ui.queue[currentFloor][1].isEmpty()) {
+                    for (int i = 0; i < ui.queue[currentFloor][1].size(); i++) {
+                        if ((int) ui.queue[currentFloor][1].get(i) - 1 < minDown) {
+                            minDown = (int) ui.queue[currentFloor][1].get(i) - 1;
+                        }
+                        addDown((Integer) ui.queue[currentFloor][1].get(i) - 1);
+                        ui.logs.append("Elevator" + name + ": number" + (currentFloor + 1) + " floor occupants to" + ui.queue[currentFloor][1].get(i)
+                                + " floor\n");
+                    }
+                    buttonList[currentFloor].setBackground(Color.BLUE);
+                    blueFlag = true;
+                }
+                ui.queue[currentFloor][1].clear();
+                ui.queLock[currentFloor][1] = true;
+
+                // 电梯走空 载上向上的人
+                while (!ui.queLock[currentFloor][0]);
+                ui.queLock[currentFloor][0] = false;
+                if (downStopList.isEmpty() && !ui.queue[currentFloor][0].isEmpty()){
+                    for (int i = 0; i < ui.queue[currentFloor][0].size();i++){
+                        if ((int)ui.queue[currentFloor][0].get(i) - 1 > maxUp){
+                            maxUp = (int)ui.queue[currentFloor][0].get(i) - 1;
+                        }
+                        addUp((Integer) ui.queue[currentFloor][0].get(i) - 1);
+                        ui.logs.append("Elevator" + name + ": number" + (currentFloor + 1) + " floor occupants to" + ui.queue[currentFloor][0].get(i)
+                                + " floor\n");
+                    }
+                    if (!upStopList.isEmpty()){
+                        ui.queue[currentFloor][0].clear();
+                        setCurrentState(1);
+                        blueFlag = true;
+                        ui.queLock[currentFloor][0] = true;
+                        ui.logs.append("Elevator" + name + " :Going up\n");
+                        break;
+                    }
+                }
+                ui.queLock[currentFloor][0] = true;
+                if (blueFlag){
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    buttonList[currentFloor].setBackground(Color.RED);
+                }
+                // 电梯走空 到底
+                if (downStopList.isEmpty() || currentFloor == 0){
+                    buttonList[currentFloor].setBackground(Color.RED);
+                    setCurrentState(0);
+                    maxUp = 0;
+                    minDown = 19;
+                    ui.logs.append("Elevator" + name + ": Stop\n");
+                    break;
+                }
+                buttonList[currentFloor].setBackground(Color.WHITE);
+                currentFloor--;
+                buttonList[currentFloor].setBackground(Color.RED);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            // 停滞状态
+            while(currentState == 0){
+                for (int i = 1; i < 20; i++){
+                    buttonList[i].setText("-");
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            // 防止线程阻塞
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
