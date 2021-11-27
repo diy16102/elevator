@@ -75,8 +75,8 @@ public class ui {
                         queue[finalI][0].add(Integer.parseInt(up[finalI].getSelectedItem().toString()));
                         labels[finalI].setBackground(Color.GREEN);
                         up[finalI].setSelectedIndex(0);
-                        logs.append("Number" + (finalI + 1) + " floor passager need to go"
-                                + queue[finalI][0] + "Floor\n");
+                        logs.append("Level " + (finalI + 1) + " floor passager need to go "
+                                + queue[finalI][0] + " Level floor \n");
                     }
                 }
             });
@@ -96,8 +96,8 @@ public class ui {
                         queue[finalI][1].add(Integer.parseInt(down[finalI].getSelectedItem().toString()));
                         labels[finalI].setBackground(Color.GREEN);
                         down[finalI].setSelectedIndex(0);
-                        logs.append("Number" + (finalI + 1) + "floor passager need to go"
-                                + queue[finalI][1] + "Floor\n");
+                        logs.append("Level " + (finalI + 1) + "floor passager need to go "
+                                + queue[finalI][1] + " Level floor\n");
                     }
                 }
             });
@@ -310,7 +310,7 @@ public class ui {
                 elevators.get(index).setCurrentState(1);
                 elevators.get(index).addUp(i);
                 elevators.get(index).setMaxUp(i);
-                logs.append("Elevator" + (index + 1) + "Launch Up\n");
+                logs.append("Elevator" + (index + 1) + "Going Up\n");
                 Thread.sleep(500);
                 return;
             }
@@ -319,7 +319,7 @@ public class ui {
                 elevators.get(index).setCurrentState(-1);
                 elevators.get(index).addDown(i);
                 elevators.get(index).setMinDown(i);
-                logs.append("Elevator" + (index + 1) + "Launch Down\n");
+                logs.append("Elevator" + (index + 1) + "Going Down\n");
                 Thread.sleep(500);
                 return;
             }

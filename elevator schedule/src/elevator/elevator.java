@@ -95,7 +95,7 @@ public class elevator extends Thread{
             while (currentState == 1){
                 boolean blueFlag = false;
                 for (int i = 1; i < 20; i++){
-                    buttonList[i].setText("上");
+                    buttonList[i].setText("Up");
                 }
                 // 下客
                 if (!upStopList.isEmpty() && currentFloor  == upStopList.peek()) {
@@ -117,8 +117,8 @@ public class elevator extends Thread{
                             maxUp = (int) ui.queue[currentFloor][0].get(i) - 1;
                         }
                         addUp((Integer) ui.queue[currentFloor][0].get(i) - 1);
-                        ui.logs.append("Elevator" + name + ": number" + (currentFloor + 1) + " floor occupants to" + ui.queue[currentFloor][0].get(i)
-                                + "floor\n");
+                        ui.logs.append("Elevator" + name + ": number" + (currentFloor + 1) + " floor occupants to " + ui.queue[currentFloor][0].get(i)
+                                + " floor\n");
                     }
                     buttonList[currentFloor].setBackground(Color.BLUE);
                     blueFlag = true;
@@ -134,8 +134,8 @@ public class elevator extends Thread{
                             minDown = (int)ui.queue[currentFloor][1].get(i) - 1;
                         }
                         addDown((Integer) ui.queue[currentFloor][1].get(i) - 1);
-                        ui.logs.append("Elevator" + name + ": number" + (currentFloor + 1) + " floor occupants to" + ui.queue[currentFloor][1].get(i)
-                                + "floor\n");
+                        ui.logs.append("Elevator" + name + ": number" + (currentFloor + 1) + " floor occupants to " + ui.queue[currentFloor][1].get(i)
+                                + " floor\n");
                     }
                     if (!downStopList.isEmpty()){
                         ui.queue[currentFloor][1].clear();
@@ -201,7 +201,7 @@ public class elevator extends Thread{
                             minDown = (int) ui.queue[currentFloor][1].get(i) - 1;
                         }
                         addDown((Integer) ui.queue[currentFloor][1].get(i) - 1);
-                        ui.logs.append("Elevator" + name + ": number" + (currentFloor + 1) + " floor occupants to" + ui.queue[currentFloor][1].get(i)
+                        ui.logs.append("Elevator" + name + ": number" + (currentFloor + 1) + " floor occupants to " + ui.queue[currentFloor][1].get(i)
                                 + " floor\n");
                     }
                     buttonList[currentFloor].setBackground(Color.BLUE);
@@ -219,7 +219,7 @@ public class elevator extends Thread{
                             maxUp = (int)ui.queue[currentFloor][0].get(i) - 1;
                         }
                         addUp((Integer) ui.queue[currentFloor][0].get(i) - 1);
-                        ui.logs.append("Elevator" + name + ": number" + (currentFloor + 1) + " floor occupants to" + ui.queue[currentFloor][0].get(i)
+                        ui.logs.append("Elevator" + name + ": number" + (currentFloor + 1) + " floor occupants to " + ui.queue[currentFloor][0].get(i)
                                 + " floor\n");
                     }
                     if (!upStopList.isEmpty()){
