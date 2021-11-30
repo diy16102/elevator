@@ -91,13 +91,13 @@ public class elevator extends Thread{
 
     public void run() {
         while(true){
-            // 上升状态 Rising state
+            // Rising state
             while (currentState == 1){
                 boolean blueFlag = false;
                 for (int i = 1; i < 20; i++){
                     buttonList[i].setText("Up");
                 }
-                // 下客  Drop off
+                // Drop off passager
                 if (!upStopList.isEmpty() && currentFloor  == upStopList.peek()) {
                     while (currentFloor  == upStopList.peek()) {
                         Integer a = upStopList.poll();
@@ -108,7 +108,7 @@ public class elevator extends Thread{
                     buttonList[currentFloor].setBackground(Color.BLUE);
                     blueFlag = true;
                 }
-                // 载上当前上升的人 pickup people who are currently rising
+                // pickup people who are currently going up
                 while (!ui.queLock[currentFloor][0]);
                 ui.queLock[currentFloor][0] = false;
                 if (!ui.queue[currentFloor][0].isEmpty()) {
@@ -125,7 +125,7 @@ public class elevator extends Thread{
                 }
                 ui.queue[currentFloor][0].clear();
                 ui.queLock[currentFloor][0] = true;
-                // 电梯走空 载上向下的人 The elevator goes empty, carrying people up or down
+                // While elevtor is empty, load passager going down
                 while (!ui.queLock[currentFloor][1]);
                 ui.queLock[currentFloor][1] = false;
                 if (upStopList.isEmpty() && !ui.queue[currentFloor][1].isEmpty()){
@@ -156,7 +156,7 @@ public class elevator extends Thread{
                     }
                     buttonList[currentFloor].setBackground(Color.RED);
                 }
-                // 电梯空了 到顶了 The elevator is empty, it's at the top of the building
+                // Because elevator is reach the top passager load off. 
                 if (upStopList.isEmpty() || currentFloor == 19){
                     setCurrentState(0);
                     maxUp = 0;
@@ -174,13 +174,13 @@ public class elevator extends Thread{
                     e.printStackTrace();
                 }
             }
-            // 下降状态 down status
+            // down status
             while(currentState == -1){
                 boolean blueFlag = false;
                 for (int i = 1; i < 20; i++){
                     buttonList[i].setText("Down");
                 }
-                // 下客 drop off people
+                // load off passager
                 if (!downStopList.isEmpty() && currentFloor  == downStopList.peek()) {
                     System.out.println(downStopList.peek());
                     while (currentFloor  == downStopList.peek()) {
@@ -192,7 +192,7 @@ public class elevator extends Thread{
                     buttonList[currentFloor].setBackground(Color.BLUE);
                     blueFlag = true;
                 }
-                // 载上当前下降的人 pickup people who are currently going down
+                // pickup people who are currently going down
                 while (!ui.queLock[currentFloor][1]);
                 ui.queLock[currentFloor][1] = false;
                 if (!ui.queue[currentFloor][1].isEmpty()) {
@@ -210,7 +210,7 @@ public class elevator extends Thread{
                 ui.queue[currentFloor][1].clear();
                 ui.queLock[currentFloor][1] = true;
 
-                // 电梯走空 载上向上的人 The elevator goes empty and carries doing up people.
+                // Elevator load off pick up passager going up.
                 while (!ui.queLock[currentFloor][0]);
                 ui.queLock[currentFloor][0] = false;
                 if (downStopList.isEmpty() && !ui.queue[currentFloor][0].isEmpty()){
@@ -240,7 +240,7 @@ public class elevator extends Thread{
                     }
                     buttonList[currentFloor].setBackground(Color.RED);
                 }
-                // 电梯走空 到底 The elevator goes empty to the bottom
+                //The elevator goes empty to the bottom
                 if (downStopList.isEmpty() || currentFloor == 0){
                     buttonList[currentFloor].setBackground(Color.RED);
                     setCurrentState(0);
@@ -258,7 +258,7 @@ public class elevator extends Thread{
                     e.printStackTrace();
                 }
             }
-            // 停滞状态  Stagnant state
+            // Stop state
             while(currentState == 0){
                 for (int i = 1; i < 20; i++){
                     buttonList[i].setText("-");
@@ -269,7 +269,7 @@ public class elevator extends Thread{
                     e.printStackTrace();
                 }
             }
-            // 防止线程阻塞  Prevent thread blocking
+            // Prevent thread blocking
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
