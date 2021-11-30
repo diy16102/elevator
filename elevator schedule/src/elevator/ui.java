@@ -42,25 +42,25 @@ public class ui {
 
 
     public static void init() {
-        // 应答队列控制锁初始化
+        // response wait que lock inialization
         for (int i = 0; i < 20; i++){
             queLock[i][0] = true;
             queLock[i][1] = true;
         }
-        // 楼号初始化
+        // floor number intialization
         for (int i = 0; i < 20; i++){
             labels[i] = new JLabel(String.valueOf(i + 1));
             labels[i].setBackground(Color.WHITE);
             labels[i].setOpaque(true);
         }
-        // 应答队列初始化
+        // response que intialization 
         for (int i = 0; i < 20; i++) {
-            // 上升等待队列
+            // up wait que
             queue[i][0] = new ArrayList<Integer>();
-            // 下降等待队列
+            // down wait que
             queue[i][1] = new ArrayList<Integer>();
         }
-        // 上升选择键初始化
+        // up button intialization
         for (int i = 0; i < 20; i++) {
             up[i] = new JComboBox();
             up[i].addItem("-");
@@ -81,7 +81,7 @@ public class ui {
                 }
             });
         }
-        // 下降选择键初始化
+        // down selection button intialization
         for (int i = 0; i < 20; i++) {
             down[i] = new JComboBox();
             down[i].addItem("-");
@@ -102,7 +102,7 @@ public class ui {
                 }
             });
         }
-        // 电梯1初始化
+        // intialize elevator 1
         for (int i = 0; i < 20; i++){
             forOne[i] = new JButton("-");
             forOne[i].setOpaque(true);
@@ -126,7 +126,7 @@ public class ui {
                 }
             }
         });
-        // 电梯2初始化
+        // intialize elevator 2
         for (int i = 0; i < 20; i++){
             forTwo[i] = new JButton("-");
             forTwo[i].setOpaque(true);
@@ -150,7 +150,7 @@ public class ui {
                 }
             }
         });
-        // 电梯3初始化
+        // intialize elevator 3
         for (int i = 0; i < 20; i++){
             forThree[i] = new JButton("-");
             forThree[i].setOpaque(true);
@@ -174,7 +174,7 @@ public class ui {
                 }
             }
         });
-        // 电梯4初始化
+        // intialize elevator  4
         for (int i = 0; i < 20; i++){
             forFour[i] = new JButton("-");
             forFour[i].setOpaque(true);
@@ -198,7 +198,7 @@ public class ui {
                 }
             }
         });
-        // 电梯5初始化
+        // intialize elevator 5
         for (int i = 0; i < 20; i++){
             forFive[i] = new JButton("-");
             forFive[i].setOpaque(true);
@@ -228,7 +228,7 @@ public class ui {
         GridLayout grid = new GridLayout(21, 8);
         Container c = new Container();
         c.setLayout(grid);
-        // 标签
+        // label 
         c.add(new JLabel("Floor"));
         c.add(new JLabel("UP"));
         c.add(new JLabel("DOWN"));
@@ -237,7 +237,7 @@ public class ui {
         c.add(new JLabel("Ele3"));
         c.add(new JLabel("Ele4"));
         c.add(new JLabel("Ele5"));
-        // 按钮
+        // button
         for (int i = 20; i > 0; i--){
             c.add(labels[i - 1]);
             c.add(up[i - 1]);
@@ -260,7 +260,7 @@ public class ui {
         frame.setSize(new Dimension(2000, 1500));
         frame.setVisible(true);
 
-        // 初始化电梯
+        // intialize elevator
         one = new elevator(1, 0, forOne);
         elevators.add(one);
         two = new elevator(2, 0, forTwo);
@@ -272,7 +272,7 @@ public class ui {
         five = new elevator(5, 0, forFive);
         elevators.add(five);
 
-        // help提示框
+        // help box
         JOptionPane.showMessageDialog(null,
                 helpMessage,
                 "Instruction",
@@ -305,7 +305,7 @@ public class ui {
         }
 
         public void adjust(int index, int i) throws InterruptedException {
-            // 最优停滞电梯位于当前楼层下方
+            // Closest un-moving elevator below request or current floor .
             if (elevators.get(index).getCurrentFloor()< i){
                 elevators.get(index).setCurrentState(1);
                 elevators.get(index).addUp(i);
@@ -314,7 +314,7 @@ public class ui {
                 Thread.sleep(500);
                 return;
             }
-            // 最优停滞电梯位于当前楼层上方
+            // Closest un-moving elevator above request or current floor .
             if (elevators.get(index).getCurrentFloor()> i){
                 elevators.get(index).setCurrentState(-1);
                 elevators.get(index).addDown(i);
@@ -323,7 +323,7 @@ public class ui {
                 Thread.sleep(500);
                 return;
             }
-            // 最优停滞电梯位于当前楼层
+            // Closest elevator in the same floor of request or current floor.
             if (elevators.get(index).getCurrentFloor() == i){
                 elevators.get(index).setCurrentState(1);
                 logs.append("Elevator" + (index + 1) + "Launch\n");
@@ -340,7 +340,7 @@ public class ui {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    // 监测上升队列
+                    //  up que monitor. 
 //                    System.out.println(queLock[i][0]);
                     while (!queLock[i][0]);
                     if (!queue[i][0].isEmpty()){
@@ -383,7 +383,7 @@ public class ui {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    // 监测下降队列
+                    // down que monitor
 //                    System.out.println(queLock[i][1]);
                     while (!queLock[i][1]);
                     if (!queue[i][1].isEmpty()){
@@ -431,7 +431,7 @@ public class ui {
 
     public static void main(String[] args){
         init();
-        // 初始化灯管理
+        //  initailize color of the elevator( color indicates status of the elevator) 
         lightManger lightmanger = new lightManger();
         elevatorManager elevatormanager = new elevatorManager();
         one.start();
