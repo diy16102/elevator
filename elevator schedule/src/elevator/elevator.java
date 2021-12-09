@@ -210,7 +210,7 @@ public class elevator extends Thread{
                 ui.queue[currentFloor][1].clear();
                 ui.queLock[currentFloor][1] = true;
 
-                // Elevator load off pick up passager going up.
+                // Elevator load off pick up passager going up
                 while (!ui.queLock[currentFloor][0]);
                 ui.queLock[currentFloor][0] = false;
                 if (downStopList.isEmpty() && !ui.queue[currentFloor][0].isEmpty()){
