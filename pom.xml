@@ -10,7 +10,7 @@
     </properties>
 
     <groupId>org.example</groupId>
-    <artifactId>ElevatorM</artifactId>
+    <artifactId>Elevator</artifactId>
     <version>1.0</version>
 
     <build>
@@ -25,11 +25,19 @@
                      <manifest>
                          <addClasspath>true</addClasspath>
                          <classpathPrefix>lib/</classpathPrefix>
-                         <mainClass>ElevatorM.ui</mainClass>
+                         <mainClass>Elevator.ui</mainClass>
                      </manifest>
                  </archive>
              </configuration>
           </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>15</source>
+                    <target>15</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
