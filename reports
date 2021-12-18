@@ -1,0 +1,10 @@
+Week3. Design the ui interface and improve the internal functions including:
+       instructions for using
+       Up and down selection keys
+       Each elevator status display
+       Real-time display of elevator location and corresponding status
+       Add constructor method and elevator algorithm to make this simulator work. Also provided user interface directly shows how our project going to work.
+       
+Week4. Modified the different states of the elevator ascending and descending
+            Drop off passager--pickup people who are currently going up--While elevtor is empty, load passager going down--elevator is reach the top passager load off.
+            load off passager--pickup people who are currently going down--Elevator load off pick up passager going up--The elevator goes empty to the bottom.
